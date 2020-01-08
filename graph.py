@@ -119,7 +119,13 @@ print(classgroup)
 #classgroup.remove('2')
 #classgroup.remove('7')
 #classgroup.remove('11')
-Mclean=M
+NS=M
+
+
+# produce symmetric matrix
+S=np.tril(NS)+np.tril(NS, -1).T
+print(np.tril(NS,-1))
+Mclean=NS
 
 
 # produce adjacency matrix
@@ -128,7 +134,7 @@ for i in range(len(classgroup)):
     l=len(lst)
     keep=np.argsort(lst)
     lst=np.zeros((l),dtype=int)
-    for j in range(3):
+    for j in range(2):
         lst[keep[-(j+1)]]=1
     Mclean[i]=lst
 
@@ -136,6 +142,6 @@ print(Mclean)
 
 
 # produce graph from adjacency marix
-G= nx.from_numpy_matrix(Mclean, create_using=nx.DiGraph())
+G= nx.from_numpy_matrix(Mclean)
 nx.draw_networkx(G, with_labels=True, arrows=True, font_weight='bold')
 plt.show()
