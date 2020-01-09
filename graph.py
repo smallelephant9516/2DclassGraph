@@ -123,12 +123,25 @@ NS=M
 
 
 # produce symmetric matrix
-S=np.tril(NS)+np.tril(NS, -1).T
-print(np.tril(NS,-1))
-Mclean=NS
+S=np.tril(NS)+np.tril(NS.T, -1)
+print(S)
+
+# select M or S
+Mclean=S
+
+
+#produce weight matrix
+MW = np.zeros([len(classgroup),len(classgroup)],dtype=float)
+for i in range(len(classgroup)):
+    sum = np.sum(Mclean[i])
+    for j in range(len(Mclean[i])):
+        MW[i][j]=Mclean[i][j]/sum
+
+print(MW)
 
 
 # produce adjacency matrix
+MA = np.zeros([len(classgroup),len(classgroup)],dtype=int)
 for i in range(len(classgroup)):
     lst=Mclean[i]
     l=len(lst)
@@ -136,12 +149,12 @@ for i in range(len(classgroup)):
     lst=np.zeros((l),dtype=int)
     for j in range(2):
         lst[keep[-(j+1)]]=1
-    Mclean[i]=lst
+    MA[i]=lst
 
-print(Mclean)
+print(MA)
 
 
 # produce graph from adjacency marix
-G= nx.from_numpy_matrix(Mclean)
+G= nx.from_numpy_matrix(MA)
 nx.draw_networkx(G, with_labels=True, arrows=True, font_weight='bold')
 plt.show()
