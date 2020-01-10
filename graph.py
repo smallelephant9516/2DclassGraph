@@ -155,6 +155,14 @@ print(MA)
 
 
 # produce graph from adjacency marix
-G= nx.from_numpy_matrix(MA)
+G= nx.Graph()
+G.add_nodes_from(classgroup)
+for i in range(len(classgroup)):
+    for j in range(len(classgroup)):
+        if MA[i][j]!=0:
+            G.add_edge(classgroup[i],classgroup[j], weight=MW[i][j])
+        else:
+            continue
+
 nx.draw_networkx(G, with_labels=True, arrows=True, font_weight='bold')
 plt.show()
