@@ -159,7 +159,7 @@ G= nx.Graph()
 G.add_nodes_from(classgroup)
 for i in range(len(classgroup)):
     for j in range(len(classgroup)):
-        if MA[i][j]!=0:
+        if (MA[i][j]!=0) & (MW[i][j]>=0.1):
             G.add_edge(classgroup[i],classgroup[j], weight=MW[i][j])
         else:
             continue
