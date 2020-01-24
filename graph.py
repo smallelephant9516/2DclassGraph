@@ -147,7 +147,7 @@ for i in range(len(classgroup)):
     l=len(lst)
     keep=np.argsort(lst)
     lst=np.zeros((l),dtype=int)
-    for j in range(2):
+    for j in range(len(classgroup)):
         lst[keep[-(j+1)]]=1
     MA[i]=lst
 
@@ -159,7 +159,7 @@ G= nx.Graph()
 G.add_nodes_from(classgroup)
 for i in range(len(classgroup)):
     for j in range(len(classgroup)):
-        if (MA[i][j]!=0) & (MW[i][j]>=0.1):
+        if (MA[i][j]!=0) & (MW[i][j]>=0.12):
             G.add_edge(classgroup[i],classgroup[j], weight=MW[i][j])
         else:
             continue
