@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 import networkx as nx
 
 
-
+#import .star file
 class read_relion(object):
 
     def __init__(self, file):
@@ -31,6 +31,15 @@ class read_relion(object):
 
 def column(matrix, i):
     return [row[i] for row in matrix]
+
+# combination of 0 and 1
+def combination(n):
+    loop=[]
+    for i in range(1<<n):
+        s=bin(i)[2:]
+        s='0'*(n-len(s))+s
+        loop.append(list(s))
+    return loop
 
 relion_data = read_relion(sys.argv[1])
 #average_data=read_relion(sys.argv[2])
@@ -163,6 +172,20 @@ for i in range(len(classgroup)):
             G.add_edge(classgroup[i],classgroup[j], weight=MW[i][j])
         else:
             continue
+
+# weight loop detection
+loop=combination(len(classgroup))
+pweight=[]
+for i in range(len(classgroup)):
+    lst=loop[i]
+    pweight.extend(0)
+    n=lst.count('1')
+    while Ture:
+        if (n<3):
+            break
+        elif :
+
+
 
 nx.draw_networkx(G, with_labels=True, arrows=True, font_weight='bold')
 plt.show()
