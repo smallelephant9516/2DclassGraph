@@ -160,6 +160,11 @@ for i in range(len(classgroup)):
         lst[keep[-(j+1)]]=1
     MA[i]=lst
 
+# cancel the self loop
+for i in range(len(classgroup)):
+    MA[i][i]=0
+
+
 print(MA)
 
 
@@ -168,22 +173,14 @@ G= nx.Graph()
 G.add_nodes_from(classgroup)
 for i in range(len(classgroup)):
     for j in range(len(classgroup)):
-        if (MA[i][j]!=0) & (MW[i][j]>=0.12):
+        if (MA[i][j]!=0):
             G.add_edge(classgroup[i],classgroup[j], weight=MW[i][j])
         else:
             continue
 
-# weight loop detection
-loop=combination(len(classgroup))
-pweight=[]
-for i in range(len(classgroup)):
-    lst=loop[i]
-    pweight.extend(0)
-    n=lst.count('1')
-    while Ture:
-        if (n<3):
-            break
-        elif :
+# find all the cycles
+clst=nx.simple_cycle(G)
+print(clst)
 
 
 
