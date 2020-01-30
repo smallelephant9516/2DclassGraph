@@ -41,6 +41,29 @@ def combination(n):
         loop.append(list(s))
     return loop
 
+def permutations(iterable, r=None):
+    pool = tuple(iterable)
+    n = len(pool)
+    r = n if r is None else r
+    if r > n:
+        return 'r is more than n'
+    indices = list(range(n))
+    cycles = list(range(n, n-r, -1))
+    yield list(pool[i] for i in indices[:r])
+    while True:
+        for i in reversed(range(r)):
+            cycles[i] -= 1
+            if cycles[i] == 0:
+                indices[i:] = indices[i+1:] + indices[i:i+1]
+                cycles[i] = n - i
+            else:
+                j = cycles[i]
+                indices[i], indices[-j] = indices[-j], indices[i]
+                yield list(pool[i] for i in indices[:r])
+                break
+        else:
+            return
+
 relion_data = read_relion(sys.argv[1])
 #average_data=read_relion(sys.argv[2])
 
@@ -179,10 +202,16 @@ for i in range(len(classgroup)):
             continue
 
 # find all the cycles
-clst=nx.simple_cycle(G)
-print(clst)
 
 
+
+loop=[]
+for value in permutations('abcde',2):
+    value_reverse=value[::-1]
+    if value_reverse in loop:
+        continue
+    else:
+        loop.append(value)
 
 nx.draw_networkx(G, with_labels=True, arrows=True, font_weight='bold')
 plt.show()
