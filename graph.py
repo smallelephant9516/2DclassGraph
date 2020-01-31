@@ -41,7 +41,7 @@ def combination(n):
         loop.append(list(s))
     return loop
 
-def permutations(iterable, r=None):
+def permutation(iterable, r=None):
     pool = tuple(iterable)
     n = len(pool)
     r = n if r is None else r
@@ -63,6 +63,22 @@ def permutations(iterable, r=None):
                 break
         else:
             return
+
+def factorial(n):
+    a=1
+    i=0
+    while i<=n:
+        i+=1
+        a*=i
+    return a
+
+def get_index(lst,item):
+    return [i for i in range(len(lst)) if lst[i] == item]
+
+
+
+
+
 
 relion_data = read_relion(sys.argv[1])
 #average_data=read_relion(sys.argv[2])
@@ -183,12 +199,63 @@ for i in range(len(classgroup)):
         lst[keep[-(j+1)]]=1
     MA[i]=lst
 
-# cancel the self loop
+# delete the self cycle
 for i in range(len(classgroup)):
     MA[i][i]=0
 
 
 print(MA)
+
+
+# find all the cycles
+
+comb=combination(len(classgroup))
+print('combination')
+pweight=[]
+all_cycles={}
+all_weights={}
+names=[]
+for i in range(len(comb)):
+    lst=comb[i]
+    node=get_index(lst, '1')
+    n=lst.count('1')
+    if n<3:
+        break
+    root=min(node)         # find start node
+    p_node=node.pop(root)
+    weight=[]
+    loop=[]
+    for value in permutation(p_node,len(p_node)):        # permutation for the rest node to find all the cycles
+        value_reverse=value[::-1].extend(root)
+        if value_reverse in loop:
+            continue
+        else:
+            whole=[root]
+            whole.extend(value)
+            loop.append(whole)
+    print('all the loops are detected for {} nodes'.format(node))
+    
+    #make name for each combination of nodes
+    name=''
+    for i in range(len(node)):
+        name=name+str(node[i])
+    
+    for i in range(len(loop)):
+        wi=0
+        tem=loop[i]
+        for j in range(len(tem)):
+            if j <=len(tem)-1:
+                wi+=MW[tem[j]][tem[j+1]]+MW[tem[j+1]][tem[j]]
+            else:
+                wi+=MW[tem[j]][tem[1]]+MW[tem[1]][tem[j]]
+        relative_wi=wi/n
+        weight.append(relative_wi)
+    
+    all_cycles[name]=loop
+    all_weights[name]=weight
+        
+
+print(all_weights)
 
 
 # produce graph from adjacency marix
@@ -200,18 +267,7 @@ for i in range(len(classgroup)):
             G.add_edge(classgroup[i],classgroup[j], weight=MW[i][j])
         else:
             continue
-
-# find all the cycles
-
-
-
-loop=[]
-for value in permutations('abcde',2):
-    value_reverse=value[::-1]
-    if value_reverse in loop:
-        continue
-    else:
-        loop.append(value)
+# draw image
 
 nx.draw_networkx(G, with_labels=True, arrows=True, font_weight='bold')
 plt.show()
