@@ -75,9 +75,11 @@ def factorial(n):
 def get_index(lst,item):
     return [i for i in range(len(lst)) if lst[i] == item]
 
-
-
-
+def find_array(arr,lst):
+    for i, j in enumerate(arr):
+        if list(j)==lst:
+            return True
+    return False
 
 
 relion_data = read_relion(sys.argv[1])
@@ -217,37 +219,45 @@ all_weights={}
 names=[]
 for i in range(len(comb)):
     lst=comb[i]
-    node=get_index(lst, '1')
-    n=lst.count('1')
+    node=get_index(lst, str(1))
+    n=lst.count(str(1))
     if n<3:
-        break
-    root=min(node)         # find start node
-    p_node=node.pop(root)
+        continue
+    root=min(node)
+    print(root)       # find start node
+    all_node=node
+    node.remove(root)
+    print(all_node)
+    print(classgroup)
     weight=[]
     loop=[]
-    for value in permutation(p_node,len(p_node)):        # permutation for the rest node to find all the cycles
-        value_reverse=value[::-1].extend(root)
-        if value_reverse in loop:
+    for value in permutation(node,len(node)):        # permutation for the rest node to find all the cycles
+        value_reverse=value[::-1]
+        value_reverse.append(root)
+        if find_array(loop,value_reverse) is True:
             continue
         else:
-            whole=[root]
-            whole.extend(value)
-            loop.append(whole)
-    print('all the loops are detected for {} nodes'.format(node))
+            value.append(root)
+            loop.append(value)
+    print('all the loops are detected for {} nodes'.format(all_node))
     
     #make name for each combination of nodes
     name=''
-    for i in range(len(node)):
-        name=name+str(node[i])
+    for i in range(len(all_node)):
+        name=name+str(all_node[i])
     
     for i in range(len(loop)):
         wi=0
         tem=loop[i]
+        print(tem)
         for j in range(len(tem)):
-            if j <=len(tem)-1:
-                wi+=MW[tem[j]][tem[j+1]]+MW[tem[j+1]][tem[j]]
+            j_0=tem[1]
+            j_n=tem[j]
+            if j <=len(tem)-2:
+                j_n1=tem[j+1]
+                wi+=MW[j_n][j_n1]+MW[j_n1][j_n]
             else:
-                wi+=MW[tem[j]][tem[1]]+MW[tem[1]][tem[j]]
+                wi+=MW[j_n][j_0]+MW[j_0][j_n]
         relative_wi=wi/n
         weight.append(relative_wi)
     
