@@ -3,6 +3,11 @@ import os
 import sys
 import matplotlib.pyplot as plt
 import networkx as nx
+from datetime import datetime
+
+#start
+start=datetime.now()
+print (datetime.now()-start)
 
 
 #import .star file
@@ -207,28 +212,27 @@ for i in range(len(classgroup)):
 
 
 print(MA)
-
+print (datetime.now()-start)
 
 # find all the cycles
 
 comb=combination(len(classgroup))
 print('combination')
 pweight=[]
-all_cycles={}
-all_weights={}
+all_cycles=[]
+all_weights=[]
 names=[]
 for i in range(len(comb)):
     lst=comb[i]
     node=get_index(lst, str(1))
     n=lst.count(str(1))
-    if n<3:
+    if n<4:
         continue
-    root=min(node)
-    print(root)       # find start node
+    root=min(node)      # find start node
     all_node=node
     node.remove(root)
     print(all_node)
-    print(classgroup)
+    print (datetime.now()-start)
     weight=[]
     loop=[]
     for value in permutation(node,len(node)):        # permutation for the rest node to find all the cycles
@@ -244,8 +248,8 @@ for i in range(len(comb)):
     #make name for each combination of nodes
     name=''
     for i in range(len(all_node)):
-        name=name+str(all_node[i])
-    
+        name=name+','+str(classgroup[all_node[i]])
+    names.append(name)
     for i in range(len(loop)):
         wi=0
         tem=loop[i]
@@ -261,12 +265,24 @@ for i in range(len(comb)):
         relative_wi=wi/n
         weight.append(relative_wi)
     
-    all_cycles[name]=loop
-    all_weights[name]=weight
+    all_cycles.append(loop)
+    all_weights.append(weight)
         
 
-print(all_weights)
+print (datetime.now()-start)
+ks=[]
+ls=[]
+for i in all_weights:
+    k=max(i)
+    ks.append(k)
+    l=i.index(max(i))
+    ls.append(l)
+h=max(ks)
+hi=ks.index(h)
+print(h,names[hi])
+#Statements
 
+print (datetime.now()-start)
 
 # produce graph from adjacency marix
 G= nx.Graph()
