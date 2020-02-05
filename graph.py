@@ -226,10 +226,11 @@ for i in range(len(comb)):
     lst=comb[i]
     node=get_index(lst, str(1))
     n=lst.count(str(1))
-    if n<4:
+    if n<3:
         continue
     root=min(node)      # find start node
     all_node=node
+    print(all_node,'remove nodes')
     node.remove(root)
     print(all_node)
     print (datetime.now()-start)
@@ -243,9 +244,9 @@ for i in range(len(comb)):
         else:
             value.append(root)
             loop.append(value)
-    print('all the loops are detected for {} nodes'.format(all_node))
     
     #make name for each combination of nodes
+    all_node.append(root)
     name=''
     for i in range(len(all_node)):
         name=name+','+str(classgroup[all_node[i]])
@@ -264,7 +265,8 @@ for i in range(len(comb)):
                 wi+=MW[j_n][j_0]+MW[j_0][j_n]
         relative_wi=wi/n
         weight.append(relative_wi)
-    
+    print('all the loops are detected for {} nodes'.format(all_node))
+
     all_cycles.append(loop)
     all_weights.append(weight)
         
