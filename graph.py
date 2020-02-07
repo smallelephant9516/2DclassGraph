@@ -4,6 +4,8 @@ import sys
 import matplotlib.pyplot as plt
 import networkx as nx
 from datetime import datetime
+import itertools
+from numba import jit
 
 #start
 start=datetime.now()
@@ -69,6 +71,7 @@ def permutation(iterable, r=None):
         else:
             return
 
+
 def factorial(n):
     a=1
     i=0
@@ -85,7 +88,15 @@ def find_array(arr,lst):
         if list(j)==lst:
             return True
     return False
-
+@jit(nopython=True)
+def all_loop(node,root):
+    loop=[]
+    for value in itertools.permutations(node):
+        if value[0]<value[-1]:
+            value=list(value)
+            value.append(root)
+            loop.append(value)
+    return loop
 
 relion_data = read_relion(sys.argv[1])
 #average_data=read_relion(sys.argv[2])
@@ -235,15 +246,9 @@ for i in range(len(comb)):
     print(all_node)
     print (datetime.now()-start)
     weight=[]
-    loop=[]
-    for value in permutation(node,len(node)):        # permutation for the rest node to find all the cycles
-        value_reverse=value[::-1]
-        value_reverse.append(root)
-        if find_array(loop,value_reverse) is True:
-            continue
-        else:
-            value.append(root)
-            loop.append(value)
+    loop=all_loop(node,root)
+    
+
     
     #make name for each combination of nodes
     all_node.append(root)
