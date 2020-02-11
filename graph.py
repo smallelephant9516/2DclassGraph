@@ -88,7 +88,7 @@ def find_array(arr,lst):
         if list(j)==lst:
             return True
     return False
-@jit(nopython=True)
+
 def all_loop(node,root):
     loop=[]
     for value in itertools.permutations(node):
