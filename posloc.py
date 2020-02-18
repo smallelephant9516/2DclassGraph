@@ -63,25 +63,27 @@ for particle in data:
     if ID in helicalnum:
         n=str(count)
         lst=helicaldic[n]
-        lst.append(particle[C])
+        lst.append([particle[C],particle[X],particle[Y]])
         helicaldic[n]=lst
     else:
         helicalnum.append(ID)
         n=str(helicalnum.index(ID))
         count+=1
-        helicaldic[n]=[particle[C]]
+        helicaldic[n]=[[particle[C],particle[X],particle[Y]]]
 print('finish converting')
 print (datetime.now()-start)
 
+print(helicalnum[0])
 
-for i in range(helicalnum):
-    with mrcfile.open(helicalnum[i],permissive=True, mode='w+') as mrc:
+for i in range(len(helicalnum)):
+    with mrcfile.open(helicalnum[i],permissive=True, mode='r+') as mrc:
         M=mrc.data
     temp_lst=helicaldic[str(i)]
     for j in temp_lst:
-        cv2.putText(M, j[0] , (j[1],j[2]), cv2.FONT_HERSHEY_SIMPLEX, 0.7, 0 , 1, cv2.LINE_AA)
-    with mrcfile.new('tmp.mrc',overwrite=True) as mrc1:
+        cv2.putText(M, j[0] , (int(round(float(j[1]))),int(round(float(j[2])))), cv2.FONT_HERSHEY_SIMPLEX, 0.7, 0 , 1, cv2.LINE_AA)
+    print(M)
+    with mrcfile.new('{}_tmp.mrc'.format(helicalnum[i][:-4]),overwrite=True) as mrc1:
         mrc1.set_data(np.zeros((3710, 3838), dtype=np.int8))
         mrc1.data[:][:]=M
 
-print (datetime.now()-start)
+print (datetime.now()-start) 
