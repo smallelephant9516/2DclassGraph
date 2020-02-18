@@ -52,7 +52,8 @@ H= relion_data.getRdata()[0].index( '_rlnHelicalTubeID' )
 C= relion_data.getRdata()[0].index( '_rlnClassNumber' )
 X= relion_data.getRdata()[0].index( '_rlnCoordinateX' )
 Y= relion_data.getRdata()[0].index( '_rlnCoordinateY' )
-
+x= relion_data.getRdata()[0].index( '_rlnOriginXAngst' )
+y= relion_data.getRdata()[0].index( '_rlnOriginYAngst' )
 print('finish reading')
 # extract helical parameters
 helicaldic={}
@@ -63,13 +64,13 @@ for particle in data:
     if ID in helicalnum:
         n=str(count)
         lst=helicaldic[n]
-        lst.append([particle[C],particle[X],particle[Y]])
+        lst.append([particle[C],float(particle[X])+float(particle[x]),float(particle[Y])+float(particle[y])])
         helicaldic[n]=lst
     else:
         helicalnum.append(ID)
         n=str(helicalnum.index(ID))
         count+=1
-        helicaldic[n]=[[particle[C],particle[X],particle[Y]]]
+        helicaldic[n]=[[particle[C],float(particle[X])+float(particle[x]),float(particle[Y])+float(particle[y])]]
 print('finish converting')
 print (datetime.now()-start)
 
@@ -80,9 +81,9 @@ for i in range(len(helicalnum)):
         M=mrc.data
     temp_lst=helicaldic[str(i)]
     for j in temp_lst:
-        cv2.putText(M, j[0] , (int(round(float(j[1]))),int(round(float(j[2])))), cv2.FONT_HERSHEY_SIMPLEX, 0.7, 0 , 1, cv2.LINE_AA)
+        cv2.putText(M, j[0] , (int(round(j[1])),int(round(j[2]))), cv2.FONT_HERSHEY_SIMPLEX, 0.7, 0 , 1, cv2.LINE_AA)
     print(M)
-    with mrcfile.new('{}_tmp.mrc'.format(helicalnum[i][:-4]),overwrite=True) as mrc1:
+    with mrcfile.new('{}_ori.mrc'.format(helicalnum[i][:-4]),overwrite=True) as mrc1:
         mrc1.set_data(np.zeros((3710, 3838), dtype=np.int8))
         mrc1.data[:][:]=M
 
