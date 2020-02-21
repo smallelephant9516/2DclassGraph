@@ -52,15 +52,15 @@ H= relion_data.getRdata()[0].index( '_rlnHelicalTubeID' )
 C= relion_data.getRdata()[0].index( '_rlnClassNumber' )
 X= relion_data.getRdata()[0].index( '_rlnCoordinateX' )
 Y= relion_data.getRdata()[0].index( '_rlnCoordinateY' )
-x= relion_data.getRdata()[0].index( '_rlnOriginXAngst' )
-y= relion_data.getRdata()[0].index( '_rlnOriginYAngst' )
+x= relion_data.getRdata()[0].index( '_rlnOriginX' )
+y= relion_data.getRdata()[0].index( '_rlnOriginY' )
 print('finish reading')
 # extract helical parameters
 helicaldic={}
 helicalnum=[]
 count=-1
 for particle in data:
-    ID = particle[M][11:]
+    ID = particle[M]
     if ID in helicalnum:
         n=str(count)
         lst=helicaldic[n]
