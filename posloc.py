@@ -61,16 +61,18 @@ helicalnum=[]
 count=-1
 for particle in data:
     ID = particle[M]
+    dx = float(particle[X])+float(particle[x])
+    dy = float(particle[Y])+float(particle[y])
     if ID in helicalnum:
         n=str(count)
         lst=helicaldic[n]
-        lst.append([particle[C],float(particle[X])+float(particle[x]),float(particle[Y])+float(particle[y])])
+        lst.append([particle[C],float(particle[X]),float(particle[Y])])
         helicaldic[n]=lst
     else:
         helicalnum.append(ID)
         n=str(helicalnum.index(ID))
         count+=1
-        helicaldic[n]=[[particle[C],float(particle[X])+float(particle[x]),float(particle[Y])+float(particle[y])]]
+        helicaldic[n]=[[particle[C],float(particle[X]),float(particle[Y])]]
 print('finish converting')
 print (datetime.now()-start)
 
